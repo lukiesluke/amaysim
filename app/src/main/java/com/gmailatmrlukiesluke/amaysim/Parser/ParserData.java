@@ -1,5 +1,7 @@
 package com.gmailatmrlukiesluke.amaysim.Parser;
 
+import android.util.Log;
+
 import com.gmailatmrlukiesluke.amaysim.model.IncludedModel;
 
 import org.json.JSONArray;
@@ -18,16 +20,16 @@ public class ParserData {
         ArrayList<IncludedModel> includedModelArrayList = new ArrayList<>();
         if (response != null && response.length() > 0) {
             try {
-                String msn = "NA";
-                int credit = 0;
-                String creditExpiry = "NA";
+
 
                 JSONArray parentArray = response.getJSONArray("included");
                 for (int i = 0; i < parentArray.length(); i++) {
+                    JSONObject finalObject = parentArray.getJSONObject(i);
                     String id = "";
                     String type = "";
-
-                    JSONObject finalObject = parentArray.getJSONObject(i);
+                    String attrMSN = "";
+                    int attrCredit = 0;
+                    String attrCreditExpiry = "";
 
                     if (contains(finalObject, "id")) {
                         id = finalObject.getString("id");
@@ -36,22 +38,13 @@ public class ParserData {
                         type = finalObject.getString("type");
                     }
 
-                    for (int j = 0; j < finalObject.getJSONArray("attributes").length(); j++) {
-
-                        JSONObject object = finalObject.getJSONArray("attributes").getJSONObject(j);
-                        msn = object.getString("msn");
-                        credit = (int) object.getDouble("credit");
-                        creditExpiry = object.getString("credit-expiry");
-
+                    if (contains(finalObject, "attributes")) {
+                        JSONObject attrObject = finalObject.getJSONObject("attributes");
+                        attrMSN = attrObject.getString("msn");
+                        attrCredit = Integer.parseInt(attrObject.getString("credit"));
+                        attrCreditExpiry = attrObject.getString("credit-expiry");
                     }
-
-                    IncludedModel includedModel = new IncludedModel();
-                    includedModel.setId(id);
-                    includedModel.setType(type);
-                    includedModel.setMsn(msn);
-                    includedModel.setCredit(credit);
-                    includedModel.setCreditExpiry(creditExpiry);
-                    includedModelArrayList.add(includedModel);
+                    Log.d("LWG", "attr: " + attrMSN + " " + attrCredit + " " + attrCreditExpiry);
                 }
 
             } catch (JSONException e) {
