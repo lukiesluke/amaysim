@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(this);
 
-        edtMSN.setText("0468874507");
+        //edtMSN.setText("0468874507");
 
         mInputLayoutMSN.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
